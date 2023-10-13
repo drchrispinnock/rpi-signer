@@ -1,19 +1,19 @@
 #!/bin/sh
 
-#date=`date +%Y%m%d%H%M%S`
-#imagefile=rpi-signer-$date.img
+date=`date +%Y%m%d%H%M%S`
+imagefile=rpi-signer-$date.img
+bootfs="/Volumes/bootfs"
 
-#url=$(cat raspbianurl.txt)
-#wget -O $imagefile.xz $url
-#xz --decompress $imagefile.xz
-#rm -f $imagefile.xz
-#open $imagefile
-#
-#bootfs="/Volumes/bootfs"
+url=$(cat raspbianurl.txt)
+echo "Fetching Raspbian"
+wget -q -O $imagefile.xz $url
+echo "Decompressing"
+xz --decompress $imagefile.xz
+rm -f $imagefile.xz
+echo "Mounting image"
+open -W $imagefile
 
-[ -z "$1" ] && echo "Usage: $0 path-to-bootfs" && exit 1
-bootfs="$1"
-
+echo "Adjusting image"
 # Make and setup directories
 #
 mkdir -p "$bootfs/tezos"
@@ -46,7 +46,7 @@ mv sfw $bootfs/sfw
 # Adjust cmdline.txt
 sed -i.orig '1s|$| systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target|' "$bootfs/cmdline.txt"
 
-
-#umount $bootfs
-#xz --compress $imagefile
+diskutil eject $bootfs
+echo "Compressing $imagefile"
+xz --compress $imagefile
 #rm -f $imagefile
