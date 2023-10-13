@@ -19,7 +19,14 @@ if [ ! -d $initdir ]; then
 fi
 
 if [ -d $sfwdir ]; then
-	(cd $sfwdir && apt install *deb)
+	if [ -f $sfwdir/order ]; then
+		for file in $(cat $sfwdir/order); do
+			dpkg -i $sfwdir/$file
+		done
+	else
+		(cd $sfwdir && apt install -y *deb)
+	fi
+	rm -rf $sfwdir
 fi
 
 [ -f $initdir/rebootafter ] && reboot=yes
