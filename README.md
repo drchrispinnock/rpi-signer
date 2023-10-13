@@ -3,13 +3,14 @@
 
 Aim: 
 
-- to provide an image containing Raspbian 64-bit and octez-signer
+- provide an image containing Raspbian 64-bit and octez-signer
 - on first boot, the image rearranges itself, encrypts the disc to 
-a password (that is supplied on boot) and copies any keys into the right
-place
+  a password (that is supplied on boot) and copies any keys into the 
+  right place
 - Designed to be headless, but a keyboard will be needed to type in the
-passphrase at boot. No SSHD.
-- A keyboard will allow you to shutdown with CTRL-ALT-DEL
+  passphrase at boot. No sshd.
+- Simple point to point network configuration so that it can be used with
+  another machine (e.g. baker) on a spare network port
 
 To use, put files in the /boot/tezos directory:
 
@@ -32,7 +33,6 @@ Additionally the dhcpcd.conf file is copied as well and this has a static
 configuration. The Pi has IP address 10.0.230.2 (netmask /30) and expects
 to talk to 10.0.230.1. This means the Pi can be attached to another 
 machine with a network cross-over cable.
-
 
 
 [] https://www.howtoraspberry.com/2020/12/how-to-make-your-own-raspberry-pi-img-files/
