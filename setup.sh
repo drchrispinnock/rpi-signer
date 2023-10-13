@@ -1,10 +1,13 @@
 #!/bin/sh
 
-date=`date +%Y%m%d%H%M%S`
-imagefile=rpi-signer-$date.img
+#date=`date +%Y%m%d%H%M%S`
+#imagefile=rpi-signer-$date.img
 bootfs="/Volumes/bootfs"
 
 url=$(cat raspbianurl.txt)
+file=$(basename $url)
+imagefile=$(echo $file | sed -e s/.img.xz$/-rpi-signer.img/)
+
 echo "Fetching Raspbian"
 wget -q -O $imagefile.xz $url
 echo "Decompressing"
