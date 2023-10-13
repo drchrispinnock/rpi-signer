@@ -22,6 +22,7 @@ if [ ! -d $configdir ]; then
 	cp /etc/octez/signer.conf $configdir
 else
 	cp $configdir/signer.conf /etc/octez
+	cp $configdir/dhcpcd.conf /etc
 fi
 
 if [ -f "$initdir/encryptpass" ]; then 

@@ -17,7 +17,6 @@ To use, put files in the /boot/tezos directory:
 - key1, key2, ... - the secret key of the keys you want to sign with
 - encryptpass - the passphrase used to encrypt the keystore. This needs to
      be supplied at each boot. MUST BE SUPPLIED ON THE FIRST BOOT
-- ipconfig - XXX the configuration (static)
 - donotdelete - if present, don't shred and delete the files (dangerous)
 - rebootafter - reboot after configuration (used for testing)
 
