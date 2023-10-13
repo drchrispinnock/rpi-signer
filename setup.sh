@@ -16,7 +16,7 @@ bootfs="$1"
 
 # Make directories
 #
-mkdir -p "$bootfs/tezos" "$bootfs/sfw" 
+mkdir -p "$bootfs/tezos"
 
 # Copy rest of stuff
 #
@@ -29,13 +29,15 @@ chmod +x $bootfs/firstrun.sh
 
 # Software
 #
+mkdir -p sfw
+cd sfw
 rm -f order
 for file in $(cat softwareurls.txt); do
 	wget $file
 	basename $file >> order
 done
-mv *.deb order $bootfs/sfw
-
+cd ..
+mv sfw $bootfs/sfw
 
 # Adjust cmdline.txt
 sed -i.orig '1s|$| systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target|' "$bootfs/cmdline.txt"
