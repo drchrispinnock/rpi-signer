@@ -14,9 +14,10 @@
 [ -z "$1" ] && echo "Usage: $0 path-to-bootfs" && exit 1
 bootfs="$1"
 
-# Make directories
+# Make and setup directories
 #
 mkdir -p "$bootfs/tezos"
+rm -rf $bootfs/sfw $bootfs/signerconfig
 
 # Copy rest of stuff
 #
@@ -30,11 +31,14 @@ chmod +x $bootfs/firstrun.sh
 # Software
 #
 mkdir -p sfw
+sfwfiles=$(cat softwareurls.txt)
 cd sfw
 rm -f order
-for file in $(cat softwareurls.txt); do
-	wget $file
-	basename $file >> order
+for file in $sfwfiles; do
+	_base=$(basename $file)
+	echo "Fetching $_base"
+	wget -q $file
+	echo $_base >> order
 done
 cd ..
 mv sfw $bootfs/sfw
