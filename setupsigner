@@ -1,8 +1,13 @@
 #!/bin/bash
 
-# Run at startup Raspberry Pi image
+# Setup routines for custom Raspberry Pi image
+#
+# If run from init.d, only at start
+#
+[ ! -z "$1" ] && [ "$1" != "start" ] && exit 0
 
 initdir=/boot/tezos
+sfwdir=/boot/sfw
 configdir=/boot/signerconfig
 keydir=/home/tzsigner
 user="tzsigner"
@@ -13,14 +18,15 @@ if [ ! -d $initdir ]; then
 	exit 1
 fi
 
+if [ -d $sfwdir ]; then
+	(cd $sfwdir && apt install *deb)
+fi
+
 [ -f $initdir/rebootafter ] && reboot=yes
 
 # Put the configuration in place (this should happen on each boot)
 #
-if [ ! -d $configdir ]; then
-	mkdir -p $configdir
-	cp /etc/octez/signer.conf $configdir
-else
+if [ -d $configdir ]; then
 	cp $configdir/signer.conf /etc/octez
 	cp $configdir/dhcpcd.conf /etc
 fi
@@ -74,8 +80,6 @@ if [ ! -f "$initdir/donotdelete" ]; then
 	#
 	(cd $initdir && shred -n 20 * && cd && rm -rf $initdir)
 fi
-
-
 
 [ "$reboot" = "yes" ] && shutdown -r now
 
