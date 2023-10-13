@@ -1,1 +1,4 @@
+https://archive.raspbian.org/raspbian/pool/main/t/trousers/libtspi1_0.3.15-0.3_armhf.deb
+https://archive.raspbian.org/raspbian/pool/main/e/ecryptfs-utils/libecryptfs1_111-6_armhf.deb
+https://archive.raspbian.org/raspbian/pool/main/e/ecryptfs-utils/ecryptfs-utils_111-6_armhf.deb
 https://pkgbeta.tzinit.org/rpi/18.0/octez-rpi-unoff-signer_18.0-1_arm64.deb
