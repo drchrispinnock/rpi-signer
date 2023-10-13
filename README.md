@@ -15,7 +15,10 @@ Aim:
 - Simple point to point network configuration so that it can be used with
   another machine (e.g. baker) on a spare network port
 
-To use, put files in the /boot/tezos directory:
+setup.sh builds an image from a standard Raspbian OS image. It only works
+on Mac.
+
+To use ths images, put files in the /boot/tezos directory:
 
 - authkey - the public key (Base58) of the authentication key
 - key1, key2, ... - the secret key of the keys you want to sign with
