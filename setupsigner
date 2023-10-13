@@ -6,9 +6,11 @@
 #
 [ ! -z "$1" ] && [ "$1" != "start" ] && exit 0
 
-initdir=/boot/tezos
-sfwdir=/boot/sfw
-configdir=/boot/signerconfig
+bootdir=/boot
+
+initdir=$bootdir/tezos
+sfwdir=$bootdir/sfw
+configdir=$bootdir/signerconfig
 keydir=/home/tzsigner
 user="tzsigner"
 reboot=no
@@ -79,7 +81,8 @@ done
 
 if [ -f "$initdir/authkey" ]; then 
 	_pk=$(cat $initdir/authkey)
-	octez-signer add authorized key authkey $_pk
+	su $user -c "octez-signer add authorized key authkey $_pk"
+	[ "$?" != "0" ] && echo "WARN: cannot import authkey" >&2
 fi
 
 if [ ! -f "$initdir/donotdelete" ]; then
