@@ -16,7 +16,11 @@ bootfs="$1"
 
 # Make directories
 #
-mkdir -p "$bootfs/tezos" "$bootfs/signerconfig" "$bootfs/sfw" 
+mkdir -p "$bootfs/tezos" "$bootfs/sfw" 
+
+# Copy rest of stuff
+#
+cp -pR signerconfig $bootfs/signerconfig
 
 # First run script
 #
@@ -32,9 +36,6 @@ for file in $(cat softwareurls.txt); do
 done
 mv *.deb order $bootfs/sfw
 
-# Copy rest of stuff
-#
-cp setupsigner dhcpcd.conf signer.conf $bootfs/signerconfig
 
 # Adjust cmdline.txt
 sed -i.orig '1s|$| systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target|' "$bootfs/cmdline.txt"
