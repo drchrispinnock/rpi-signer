@@ -1,6 +1,9 @@
 
 # Raspberry Remote Signer
 
+XXX This is not production ready yet. Prototype in development.
+XXX Expect something usable in November 2023.
+
 Aim: 
 
 - provide an image containing Raspbian 64-bit and octez-signer
