@@ -20,12 +20,19 @@ To use, put files in the /boot/tezos directory:
 - donotdelete - if present, don't shred and delete the files (dangerous)
 - rebootafter - reboot after configuration (used for testing)
 
-More keys can be added on subsequent boots. donotdelete is only there
-for testing. 
+On subsequent boots, new software can be put in /boot/sfw & more keys can 
+be added in /boot/tezos.
 
 In /boot/signerconfig, you can supply a signer.conf file which will be copied
 to disc at boot. In here you can change options to block operations. e.g.
 stop the system, put the SD card into another computer, edit the file and 
 return it to the Raspberry Pi.
 
+Additionally the dhcpcd.conf file is copied as well and this has a static
+configuration. The Pi has IP address 10.0.230.2 (netmask /30) and expects
+to talk to 10.0.230.1. This means the Pi can be attached to another 
+machine with a network cross-over cable.
 
+
+
+[] https://www.howtoraspberry.com/2020/12/how-to-make-your-own-raspberry-pi-img-files/
