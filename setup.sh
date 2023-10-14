@@ -1,12 +1,16 @@
 #!/bin/sh
 
-#date=`date +%Y%m%d%H%M%S`
-#imagefile=rpi-signer-$date.img
+debug=1 #xxx
+[ "$1" = "debug" ] && debug=1
+
 bootfs="/Volumes/bootfs"
 
 url=$(cat raspbianurl.txt)
 file=$(basename $url)
-imagefile=$(echo $file | sed -e s/.img.xz$/-rpi-signer.img/)
+tail=rpi-signer
+[ "$debug" = "1" ] && tail=rpi-signer-debug
+
+imagefile=$(echo $file | sed -e s/.img.xz$/-$tail.img/)
 
 echo "Fetching Raspbian"
 wget -q -O $imagefile.xz $url
@@ -49,8 +53,14 @@ mv sfw $bootfs/sfw
 echo "Adjusting boot tools"
 # Adjust cmdline.txt
 sed -i.orig '1s|$| systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target|' "$bootfs/cmdline.txt"
-# config
-echo "enable_uart=1" >> $bootfs/config.txt
+
+if [ "$debug" = "1" ]; then
+	# config serial console
+	#
+	echo "enable_uart=1" >> $bootfs/config.txt
+else
+	# Harden
+
 
 diskutil eject $bootfs
 echo "Compressing $imagefile"
