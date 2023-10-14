@@ -46,8 +46,11 @@ done
 cd ..
 mv sfw $bootfs/sfw
 
+echo "Adjusting boot tools"
 # Adjust cmdline.txt
 sed -i.orig '1s|$| systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target|' "$bootfs/cmdline.txt"
+# config
+echo "enable_uart=1" >> $bootfs/config.txt
 
 diskutil eject $bootfs
 echo "Compressing $imagefile"
