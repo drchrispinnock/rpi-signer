@@ -32,8 +32,8 @@ cp -pR signerconfig $bootfs/signerconfig
 
 # First run script
 #
-cp firstrun.sh $bootfs
-chmod +x $bootfs/firstrun.sh
+cp post-install.sh $bootfs
+chmod +x $bootfs/post-install.sh
 
 # Software
 #
@@ -51,15 +51,15 @@ cd ..
 mv sfw $bootfs/sfw
 
 echo "Adjusting boot tools"
-# Adjust cmdline.txt
-sed -i.orig '1s|$| systemd.run=/boot/firstrun.sh systemd.run_success_action=reboot systemd.unit=kernel-command-line.target|' "$bootfs/cmdline.txt"
 
 if [ "$debug" = "1" ]; then
-	# config serial console
-	#
-	echo "enable_uart=1" >> $bootfs/config.txt
+	# Todo. Maybe enable serial console
+	echo
+#	echo "enable_uart=1" >> $bootfs/config.txt
 else
-	# Harden
+	# Harden - remove logins. etc
+	echo
+fi
 
 
 diskutil eject $bootfs
