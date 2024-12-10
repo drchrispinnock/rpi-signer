@@ -10,15 +10,18 @@ configdir=$bootdir/signerconfig
 keydir=/home/tzsigner
 user="tzsigner"
 reboot=no
+donotdelete=yes
 
-if [ ! -d $initdir ]; then
-	echo "Cannot find tezos initialisation directory" 2>&1
-	exit 1
-fi
+
+echo "Tezos Signer Postinstaller"
+echo ""
+
+[ -f "$initdir/donotdelete" ] && donotdelete=yes
 
 if [ -d $sfwdir ]; then
 	if [ -f $sfwdir/order ]; then
 		for file in $(cat $sfwdir/order); do
+			echo "Installing $file"
 			dpkg -i $sfwdir/$file
 		done
 	else
@@ -67,13 +70,17 @@ systemctl enable octez-signer
 # Import keys into the signer
 #
 stub=`date +%Y%m%d%H%M%S`
-for file in $initdir/key*; do
-	_alias="${stub}-$(basename $file)"
-	_key=$(cat $file)
-	echo "Importing $_alias" >&2
-	su $user -c "octez-signer import secret key $_alias $_key"
-	[ "$?" != "0" ] && echo "WARN: cannot import $_alias" >&2
-done
+keys="$initdir/key*"
+if [ ! -z "$keys" ]; then
+
+	for file in $keys; do
+		_alias="${stub}-$(basename $file)"
+		_key=$(cat $file)
+		echo "Importing $_alias" >&2
+		su $user -c "octez-signer import secret key $_alias $_key"
+		[ "$?" != "0" ] && echo "WARN: cannot import $_alias" >&2
+	done
+fi
 
 if [ -f "$initdir/authkey" ]; then 
 	_pk=$(cat $initdir/authkey)
@@ -81,11 +88,13 @@ if [ -f "$initdir/authkey" ]; then
 	[ "$?" != "0" ] && echo "WARN: cannot import authkey" >&2
 fi
 
-if [ ! -f "$initdir/donotdelete" ]; then
+if [ "$donotdelete" = "no" ]; then
 	# Scramble the files and delete
 	#
 	(cd $initdir && shred -n 20 * && cd && rm -rf $initdir)
 fi
+
+echo "Exiting"
 
 [ "$reboot" = "yes" ] && shutdown -r now
 
